@@ -3,7 +3,7 @@ import { Avatar } from "@chakra-ui/avatar"
 import { BsInstagram } from "react-icons/bs"
 import { CgMoreO } from "react-icons/cg"
 import { FaLink } from "react-icons/fa";
-import { FaCircleInfo } from "react-icons/fa6";
+import { BsInfoCircle } from "react-icons/bs";
 import { MdBlock } from "react-icons/md";
 import { TbMessageReport } from "react-icons/tb";
 import {useToast} from "@chakra-ui/toast";
@@ -43,7 +43,7 @@ const copyURL = () =>{
     <VStack gap={4} alignItems={"start"}>
       <Flex justifyContent={"space-between"} w={"full"}>
       <Box>
-      <Text fontSize={"2xl"} fontWeight={"bold"}>
+      <Text fontSize={"2xl"} fontWeight={"bold"} onClick={onOpen} cursor={'pointer'} className="myName">
         Mark Zuckerberg
       </Text>
       <Flex gap={2} alignItems={"center"}>
@@ -54,14 +54,18 @@ const copyURL = () =>{
       </Flex>
       </Box>
       <Box>
-        <Avatar name="Mark Zuckerberg" src="/zuck-avatar.png" size={"xl"}/>
+        <Avatar name="Mark Zuckerberg" src="/zuck-avatar.png"
+         size={{
+          base: 'md',
+          md: 'xl'
+         }}/>
       </Box>
       </Flex> 
       
       <Text>Co-founder, executive chairman and CEO of Meta Platforms.</Text>
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
-        <Text color={"gray.light"}>3.2M followers</Text>
+        <Text color={"gray.light"}>4.2M followers</Text>
         <Box w={'1'} h={'1'} bg={'gray.light'} borderRadius={'full'}></Box>
         <Link color={'gray.light'}>linktr.ee/MarkZuckerberg</Link>
         </Flex>
@@ -77,10 +81,10 @@ const copyURL = () =>{
               <Portal>
                 <MenuList bg={'gray.dark'}>
                   <MenuItem icon={ <FaLink /> }  bg={'gray.dark'} onClick={copyURL}> Copy link  </MenuItem>
-                  <MenuItem icon={<FaCircleInfo />} bg={'gray.dark'} onClick={onOpen}> About this profile</MenuItem>
+                  <MenuItem icon={<BsInfoCircle />} bg={'gray.dark'} onClick={onOpen}> About this profile</MenuItem>
                   <MenuDivider/>
-                  <MenuItem icon={ <MdBlock /> } bg={'gray.dark'}> Block </MenuItem>
-                  <MenuItem icon={<TbMessageReport />} bg={'gray.dark'}> Report </MenuItem>
+                  <MenuItem icon={ <MdBlock /> } color={'red'} bg={'gray.dark'}> Block </MenuItem>
+                  <MenuItem icon={<TbMessageReport />} color={'red'} bg={'gray.dark'}> Report </MenuItem>
                 </MenuList>
               </Portal> 
             </Menu>
