@@ -1,8 +1,9 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
-const Actions = ({ liked, setLiked }) => {
+const Actions = ({ liked, setLiked, likes }) => {
+
 	return (
-		<Flex gap={3} my={2} onClick={(e) => e.preventDefault()}>
+		<Flex gap={4} my={2} onClick={(e) => e.preventDefault()}>
 			<svg
 				aria-label='Like'
 				color={liked ? "rgb(237, 73, 86)" : ""}
@@ -19,7 +20,9 @@ const Actions = ({ liked, setLiked }) => {
 					strokeWidth='2'
 				></path>
 			</svg>
-
+            <Text  ml={-3} color={'gray.light'} fontSize={'sm'} >
+                {likes + (liked ? 1 : 0)} 
+            </Text>
 			<svg aria-label='Comment' color='' fill='' height='20' role='img' viewBox='0 0 24 24' width='20'>
 				<title>Comment</title>
 				<path

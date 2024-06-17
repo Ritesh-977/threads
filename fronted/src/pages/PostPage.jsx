@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Image, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Divider } from "@chakra-ui/react"
+import { Avatar, Box, Flex, Image, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Divider, Button } from "@chakra-ui/react"
 import { BsThreeDots } from "react-icons/bs";
 import { FaLink } from "react-icons/fa";
 import { RiSaveLine } from "react-icons/ri";
@@ -7,6 +7,7 @@ import { TbMessageReport } from "react-icons/tb";
 import Actions from "../componenets/Actions";
 import {useToast} from "@chakra-ui/toast";
 import { useState } from "react";
+import Comment from "../componenets/Comment";
 
 const PostPage = () => {
   const [liked, setLiked] = useState(false);
@@ -62,17 +63,48 @@ const PostPage = () => {
       </Box>
 
       <Flex gap={3} my={3} cursor={'pointer'}>
-        <Actions liked={liked} setLiked={setLiked} />
+        <Actions liked={liked} setLiked={setLiked} likes={342} />
       </Flex>
 
       <Flex gap={2} alignItems={"center"}>
         <Text color={'gray.light'} fontSize={'sm'} > 341 replies</Text>
-        <Box w={0.5} h={0.5} borderRadius={'full'} bg={'gray.light'}></Box>
-        <Text color={'gray.light'} fontSize={'sm'} >
-          {1245 + (liked ? 1 : 0)} likes</Text>
       </Flex>
 
       <Divider my={4}/>
+
+      <Flex justifyContent={'space-between'}>
+        <Flex gap={2} alignItems={'center'}>
+          <Text fontSize={'2xl'}>👋</Text>
+          <Text color={'gray.light'}>Get the app now to like, reply and post easily,</Text>
+        </Flex>
+        <Button>Get</Button>
+      </Flex>
+
+      <Divider my={4}/>
+  
+      <Comment 
+      comment = "Looks really Good!"
+      createdAt = '2d'
+      likes = {15}
+      username = 'johndoe'
+      userAvatar = 'https://bit.ly/dan-abramov'
+      />
+  
+      <Comment 
+      comment = "Excellent Work"
+      createdAt = '1d'
+      likes = {21}
+      username = 'kentdodds'
+      userAvatar = 'https://bit.ly/kent-c-dodds'
+      />
+  
+      <Comment 
+      comment = "Nice"
+      createdAt = '3d'
+      likes = {5}
+      username = 'prosper'
+      userAvatar = 'https://bit.ly/prosper-baba'
+      />
 
     </>
   )
