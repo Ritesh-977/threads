@@ -1,4 +1,4 @@
-import { Box, Flex, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Text, VStack, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Flex, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Text, VStack, useDisclosure } from "@chakra-ui/react"
 import { Avatar } from "@chakra-ui/avatar"
 import { BsInstagram } from "react-icons/bs"
 import { CgMoreO } from "react-icons/cg"
@@ -7,7 +7,10 @@ import { BsInfoCircle } from "react-icons/bs";
 import { MdBlock } from "react-icons/md";
 import { TbMessageReport } from "react-icons/tb";
 import {useToast} from "@chakra-ui/toast";
-import React from "react";
+import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { useRecoilValue } from 'recoil';
+import userAtom from './../atoms/userAtom';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -17,8 +20,18 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
 } from '@chakra-ui/react';
+import useShowToast from "../hooks/useShowToast";
 
-const UserHeader = () => {
+const UserHeader = ({user}) => {  // This user is the  Profile visited user
+
+  const showToast = useShowToast();
+
+  const currentUser = useRecoilValue(userAtom); // Currently logged in user
+
+  const [following, setFollowing] = useState(user.followers.includes(currentUser._id));
+
+  const [updating, setUpdating] = useState(false);
+
   // Alert Box
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef()
@@ -37,6 +50,42 @@ const copyURL = () =>{
   })
 }
 // 
+   const handleFollowUnfollow = async ()=>{
+    if(!currentUser){
+      showToast("Error", "Please login to follow", "error");
+      return;
+    }
+    setUpdating(true);
+    try {
+       const res = await fetch(`/api/users/follow/${user._id}`,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        }
+       });
+       const data = await res.json();
+       if(data.error){
+        showToast("Error", data.error, "error");
+        return;
+       }
+       if(following){   
+        showToast("","Unfollowed","success");  
+        user.followers.pop();
+       }
+       else{
+        user.followers.push(currentUser._id);
+       }
+       setFollowing(!following);
+
+    } catch (error) {
+      showToast("Error", error, "error");
+    } finally{
+       setUpdating(false);
+    }
+   }
+//
+ let dt = new Date(user.createdAt);
+ dt = dt.toGMTString();
 
   return (
     <>
@@ -44,30 +93,41 @@ const copyURL = () =>{
       <Flex justifyContent={"space-between"} w={"full"}>
       <Box>
       <Text fontSize={"2xl"} fontWeight={"bold"} onClick={onOpen} cursor={'pointer'} className="myName">
-        Mark Zuckerberg
+        {user.name}
       </Text>
       <Flex gap={2} alignItems={"center"}>
-        <Text fontSize={"sm"}>zuckerberg</Text>
+        <Text fontSize={"sm"}>{user.username}</Text>
         <Text fontSize={"xs"} bg={"gray.dark"} color={"gray.light"} p={1} borderRadius={"full"}>
           threads.net
         </Text>
       </Flex>
       </Box>
       <Box>
-        <Avatar name="Mark Zuckerberg" src="/zuck-avatar.png"
+       {user.profilePic && (
+         <Avatar name={user.name}src={user.profilePic}
          size={{
           base: 'md',
           md: 'xl'
          }}/>
+       )}
+         {!user.profilePic && (
+         <Avatar name={user.name}
+        src="https://bit.ly/broken-link"
+         size={{
+          base: 'md',
+          md: 'xl'
+         }}/>
+       )}
       </Box>
       </Flex> 
       
-      <Text>Co-founder, executive chairman and CEO of Meta Platforms.</Text>
+      <Text>{user.bio}</Text>
+    
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
-        <Text color={"gray.light"}>4.2M followers</Text>
-        <Box w={'1'} h={'1'} bg={'gray.light'} borderRadius={'full'}></Box>
-        <Link color={'gray.light'}>linktr.ee/MarkZuckerberg</Link>
+        <Text color={"gray.light"}>{user.followers.length} followers</Text>
+        { user.website && <Box w={'1'} h={'1'} bg={'gray.light'} borderRadius={'full'}></Box> }
+        <Link color={'gray.light'} target="_blank" href={user.website}>{user.website}</Link>
         </Flex>
         <Flex>
           <Box className="icon-container">
@@ -90,6 +150,50 @@ const copyURL = () =>{
             </Menu>
             
           </Box>
+        </Flex>
+      </Flex>
+      
+      <Flex w={'full'} >
+
+     
+        {currentUser._id === user._id && (
+           <Flex flex={1} justifyContent={'center'} pb={3}>
+          <Link as ={RouterLink} to="/update">
+          <Button 
+           size='md'
+           height='40px'
+           width='600px'
+          borderRadius={'10px'}
+           >Edit Profile</Button>
+        </Link>  </Flex> )}
+       
+        <Flex flex={1} justifyContent={'center'} pb={3}>
+        {currentUser._id !== user._id && (
+          <Button 
+           size='md'
+           height='37px'
+           width='280px'
+           border={"1px solid"}
+           borderColor={"#595353"}
+          borderRadius={'10px'}
+          isLoading ={updating}
+          onClick={handleFollowUnfollow}
+           >{following ? "Following" : "Follow"}</Button>
+         )}
+        </Flex>
+
+        <Flex flex={1} justifyContent={'center'}>
+        {currentUser._id !== user._id && (
+        // <Link as ={RouterLink} to="/">
+          <Button 
+          border={"1px solid"}
+          borderColor={"#595353"}
+          size='md'
+           height='37px'
+           width='280px'
+          borderRadius={'10px'} > Message</Button>
+        // </Link> 
+        )}
         </Flex>
       </Flex>
 
@@ -116,9 +220,9 @@ const copyURL = () =>{
           <AlertDialogHeader>About Profile</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody >
-           <strong>Name</strong> <br/> Mark Zuckerburg (zuckerberg)
+           <strong>Name</strong> <br/> {user.name} ({user.username})
            <br />
-           <strong>Joined</strong> <br/> 09/02/2018
+           <strong>Joined</strong> <br/> {dt}
           </AlertDialogBody>
           <AlertDialogFooter>  
           </AlertDialogFooter>

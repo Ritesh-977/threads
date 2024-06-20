@@ -35,6 +35,10 @@ const userSchema = mongoose.Schema({
     bio:{
         type: String,
         default:"",
+    },
+    website:{
+        type: String,
+        default:"",
     }
 },{
     timestamps: true,

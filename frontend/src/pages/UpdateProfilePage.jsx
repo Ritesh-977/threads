@@ -24,6 +24,7 @@ export default function UpdateProfilePage() {
         username: user.username,
         email: user.email,
         bio: user.bio,
+        website: user.website,
         password: "",
     });
     const showToast = useShowToast();
@@ -122,8 +123,18 @@ export default function UpdateProfilePage() {
                             type="text"
                         />
                     </FormControl>
+                    <FormControl >
+                        <FormLabel>Website Link</FormLabel>
+                        <Input
+                            value={inputs.website}
+                            onChange={(e) => setInputs({ ...inputs, website: e.target.value })}
+                            placeholder="link.com"
+                            _placeholder={{ color: 'gray.500' }}
+                            type="text"
+                        />
+                    </FormControl>
                     <FormControl id="password" >
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Change Password</FormLabel>
                         <Input
                             value={inputs.password}
                             onChange={(e) => setInputs({ ...inputs, password: e.target.value })}

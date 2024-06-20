@@ -51,7 +51,8 @@ const signupUser = async (req, res)=>{
         email: newUser.email,
         username: newUser.username,
         bio: newUser.bio,
-        profilePic: newUser.profilePic
+        profilePic: newUser.profilePic,
+        website: newUser.website
     });
     }
     else{
@@ -83,6 +84,8 @@ const loginUser = async (req,res)=>{
             username: user.username,
             bio: user.bio,
             profilePic: user.profilePic,
+            website: user.website,
+
         });
 
         
@@ -139,7 +142,7 @@ const followUnfollowUser = async (req, res)=>{
 
 // Update User's detail
 const updateUser = async (req, res)=>{
-    const {name, email, username, password, bio} = req.body;
+    const {name, email, username, password, bio, website} = req.body;
     let { profilePic } = req.body;
     const userId = req.user._id;
     try {
@@ -167,6 +170,7 @@ const updateUser = async (req, res)=>{
         user.email = email || user.email;
         user.profilePic = profilePic || user.profilePic;
         user.bio = bio || user.bio;
+        user.website = website || user.website;
 
         user = await user.save();
 
