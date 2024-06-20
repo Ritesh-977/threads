@@ -1,6 +1,8 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
 import genTokenAndSetCookie from '../utils/helpers/genTokenAndSetCookie.js';
+import { v2 as cloudinary } from 'cloudinary';
+
 
 // Get Users Profile
 const getUserProfile = async (req, res)=>{
@@ -16,7 +18,6 @@ const getUserProfile = async (req, res)=>{
         console.log("Error in getUserProfile: ", err.message)
     }
 }
-
 
 // Signup
 const signupUser = async (req, res)=>{
@@ -48,8 +49,10 @@ const signupUser = async (req, res)=>{
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        username: newUser.username
-    })
+        username: newUser.username,
+        bio: newUser.bio,
+        profilePic: newUser.profilePic
+    });
     }
     else{
         res.status(400).json({error: "Invalid user data"});
@@ -77,7 +80,9 @@ const loginUser = async (req,res)=>{
             _id: user._id,
             name: user.name,
             email: user.email,
-            username: user.username
+            username: user.username,
+            bio: user.bio,
+            profilePic: user.profilePic,
         });
 
         
@@ -134,7 +139,8 @@ const followUnfollowUser = async (req, res)=>{
 
 // Update User's detail
 const updateUser = async (req, res)=>{
-    const {name, email, username, password, profilePic, bio} = req.body;
+    const {name, email, username, password, bio} = req.body;
+    let { profilePic } = req.body;
     const userId = req.user._id;
     try {
         let user = await User.findById(userId);
@@ -147,6 +153,15 @@ const updateUser = async (req, res)=>{
             user.password = hashedPassword;
         }
 
+        if(profilePic){
+            if(user.profilePic){
+                await cloudinary.uploader.destroy(user.profilePic.split("/").pop().split(".")[0]);
+            }
+
+            const uploadResponse = await cloudinary.uploader.upload(profilePic);
+            profilePic = uploadResponse.secure_url;
+        }
+
         user.name = name || user.name;
         user.username = username || user.username;
         user.email = email || user.email;
@@ -154,11 +169,14 @@ const updateUser = async (req, res)=>{
         user.bio = bio || user.bio;
 
         user = await user.save();
-        res.json({message: "Profile updated successfully", user});
+
+        user.password = null;
+        
+        res.json(user);
         
     } catch (err) {
         res.status(500).json({error: err.message})
-        console.log("Error in loginUser: ", err.message)
+        console.log("Error in Updating User: ", err.message)
     }
 
 }

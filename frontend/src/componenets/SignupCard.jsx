@@ -23,6 +23,73 @@ import userAtom from '../atoms/userAtom'
 
 
 export default function SignupCard() {
+//
+const [isDisabled, setIsDisabled] = useState(true)
+const indicator = document.querySelector(".indicator")
+const weak = document.querySelector(".weak")
+const medium = document.querySelector(".medium")
+const strong = document.querySelector(".strong")
+const text = document.querySelector(".text")
+let regExpWeak = /[a-z]/;
+let regExpMedium = /[A-Z]/;
+let regExpStrong = /.[\d+]/;
+let no = 0;
+function trigger(){
+  if(inputs.password !== ""){
+    indicator.style.display = "block";
+    indicator.style.display = "flex";
+    if(inputs.password.length <= 5) no = 0;
+    if(inputs.password.length >= 6 && (inputs.password.match(regExpWeak) || inputs.password.match(regExpMedium) || inputs.password.match(regExpStrong))) no=1;
+    if(inputs.password.length >=6 && 
+      ((inputs.password.match(regExpWeak) && inputs.password.match(regExpMedium)) ||
+       (inputs.password.match(regExpWeak) && inputs.password.match(regExpStrong)) || 
+       (inputs.password.match(regExpMedium) && inputs.password.match(regExpStrong) ))) no=2;
+
+    if(inputs.password.length >= 6 && (inputs.password.match(regExpWeak) && inputs.password.match(regExpMedium) && inputs.password.match(regExpStrong))) no=3;
+    if(no === 0){
+      weak.classList.add("active");
+      text.style.display = "block";
+      text.textContent = "Password is too short";
+      setIsDisabled(true);
+    }
+     if(no === 1){
+      weak.classList.add("active");
+      text.style.display = "block";
+      text.textContent = "Password is weak";
+      text.classList.add("weak");
+      setIsDisabled(true);
+    }
+    if(no === 2){
+      medium.classList.add("active");
+      text.textContent = "Password is medium";
+      text.classList.add("medium");
+      setIsDisabled(true);
+    } else{
+      medium.classList.remove("active");
+      text.classList.remove("medium");
+      setIsDisabled(true);
+    }
+    if(no === 3){
+      medium.classList.add("active");
+      strong.classList.add("active");
+      text.textContent = "Password is strong";
+      text.classList.add("strong");
+      setIsDisabled(false);
+    } else{
+      strong.classList.remove("active");
+      text.classList.remove("strong");
+      setIsDisabled(true);
+    }
+
+  }else{
+     indicator.style.display = "none";
+     text.style.display = "none";
+     setIsDisabled(true);
+  }
+}
+
+
+//
   const [showPassword, setShowPassword] = useState(false)
   const setUser = useSetRecoilState(userAtom);
   const setAuthScreen = useSetRecoilState(authScreenAtom)
@@ -32,6 +99,7 @@ export default function SignupCard() {
     email:"",
     password:"",
   })
+ 
   const showToast = useShowToast();
   const handleSignup = async () =>{
     try {
@@ -107,7 +175,10 @@ export default function SignupCard() {
               <InputGroup>
                 <Input type={showPassword ? 'text' : 'password'} 
                 onChange={(e)=> setInputs({...inputs, password: e.target.value})}
-                value={inputs.password}/>
+                value={inputs.password}
+                onKeyUp={trigger}
+                />
+                
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
@@ -117,6 +188,13 @@ export default function SignupCard() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+            <div className='indicator'>
+              <span className='weak'></span>
+              <span className='medium'></span>
+              <span className='strong'></span>
+            </div>
+            <div className='text'></div>
+
             <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"
@@ -127,6 +205,7 @@ export default function SignupCard() {
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
                 onClick={handleSignup}
+                isDisabled = {isDisabled}
                 >
                 Sign up
               </Button>

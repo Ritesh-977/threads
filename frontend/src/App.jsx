@@ -8,15 +8,17 @@ import Header from "./componenets/Header";
 import { useRecoilValue } from "recoil";
 import userAtom from "./atoms/userAtom";
 import LogoutButton from "./componenets/LogoutButton";
+import UpdateProfilePage from "./pages/UpdateProfilePage";
 function App() {
  const user = useRecoilValue(userAtom);
- console.log(user);
+
   return (
     <Container maxW="620px">
       <Header/>
      <Routes>
        <Route path="/" element={user ? <HomePage/>: <Navigate to="/auth"/>}></Route>
        <Route path="/auth" element={!user ? <AuthPage />: <Navigate to="/"/> } />
+       <Route path="/update" element={user ? <UpdateProfilePage />: <Navigate to="/auth"/> } />
 
        <Route path="/:username" element={<UserPages/>}></Route>
        <Route path="/:username/post/:pid" element={<PostPage/>}></Route>

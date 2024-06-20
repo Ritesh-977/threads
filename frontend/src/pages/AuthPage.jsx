@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 
 const AuthPage = () => {
     const authScreenState = useRecoilValue(authScreenAtom);
-    console.log(authScreenState);
+
   return (
     <>
     {
