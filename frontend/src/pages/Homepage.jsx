@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const Homepage = () => {
   return (
-    <Link to={"/markzuckerberg"}>
+    <Link to={"/snow"}>
         <Flex w={"full"} justifyContent={"center"}>
             <Button mx={"auto"}>Visit Profile Page</Button>
         </Flex>

@@ -3,29 +3,38 @@ import UserHeader from "../componenets/UserHeader"
 import UserPost from "../componenets/UserPost"
 import { useParams } from "react-router-dom";
 import useShowToast from "../hooks/useShowToast";
+import { Flex, Spinner } from "@chakra-ui/react";
 const UserPages = () => {
-  const showtoast = useShowToast();
+  const showToast = useShowToast();
   const [user, setUser] = useState(null);
   const {username} = useParams();
+  const [loading, setLoading] = useState(true);
   useEffect(()=>{
      const getUser = async() =>{
       try {
         const res = await fetch(`/api/users/profile/${username}`);
         const data = await res.json();
         if(data.error){
-          showtoast("Error",data.error,"error");
+          showToast("Error",data.error,"error");
           return;
         }
         setUser(data);
       } catch (error) {
-        showtoast("Error",error,"error");
+        showToast("Error",error,"error");
        
+      } finally{
+        setLoading(false);
       }
      };
      getUser();
-  },[username, showtoast])
-
-  if(!user) return null;
+  },[username, showToast]);
+  if(!user && loading){
+    return (
+      <Flex justifyContent={'center'}><Spinner size={'xl'} /></Flex>
+    )
+  }
+  //   if(!user) return null;
+   if(!user && !loading) return <h1>User not found</h1>;
   return (
     <div>
       <UserHeader user={user}/>

@@ -29,11 +29,14 @@ import userAtom from '../atoms/userAtom'
 
     const setUser = useSetRecoilState(userAtom);
     
+    const [loading, setLoading] = useState(false);
+
     const [inputs, setInputs] = useState({
         username: "",
         password: ""
     });
     const handleLogin = async ()=>{
+       setLoading(true)
             try {
                 const res = await fetch("/api/users/login",{
                     method: "POST",
@@ -54,6 +57,8 @@ import userAtom from '../atoms/userAtom'
 
             } catch (error) {
                 showToast("Error",error,"error");
+            } finally{
+              setLoading(false);
             }
     }
     return (
@@ -110,8 +115,9 @@ import userAtom from '../atoms/userAtom'
               </Stack>
               <Stack spacing={10} pt={2}>  
                 <Button
+                isLoading={loading}
                   onClick={handleLogin}
-                  loadingText="Submitting"
+                  loadingText="logging in"
                   size="lg"
                   bg={useColorModeValue("gray.600", "gray.700")}
                   color={'white'}
