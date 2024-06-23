@@ -15,7 +15,7 @@ import userAtom from '../atoms/userAtom'
 import { useRef, useState } from 'react';
 import usePreviewImg from '../hooks/usePreviewImg';
 import useShowToast from '../hooks/useShowToast';
-
+import { Link } from "react-router-dom";
 
 export default function UpdateProfilePage() {
     const [user, setUser] = useRecoilState(userAtom);
@@ -58,6 +58,7 @@ export default function UpdateProfilePage() {
             showToast("Success", "Profile updated successfully", "success");
             setUser(data);
             localStorage.setItem("user-threads", JSON.stringify(data));
+
         } catch (error) {
             showToast("Error", error, "error");
         } finally{
@@ -154,6 +155,7 @@ export default function UpdateProfilePage() {
                         />
                     </FormControl>
                     <Stack spacing={6} direction={['column', 'row']}>
+                    <Link to={`/${user.username}`}>
                         <Button
                             bg={'red.400'}
                             color={'white'}
@@ -161,8 +163,9 @@ export default function UpdateProfilePage() {
                             _hover={{
                                 bg: 'red.600',
                             }}>
-                            Cancel
+                            Close
                         </Button>
+                        </Link>
                         <Button
                          
                             type='submit'
@@ -174,7 +177,7 @@ export default function UpdateProfilePage() {
                                 bg: 'green.700',
                             }}
                             >
-                            Submit
+                            Update
                         </Button>
                     </Stack>
                 </Stack>

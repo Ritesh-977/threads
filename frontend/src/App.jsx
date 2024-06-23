@@ -7,7 +7,6 @@ import AuthPage from "./pages/AuthPage";
 import Header from "./componenets/Header";
 import { useRecoilValue } from "recoil";
 import userAtom from "./atoms/userAtom";
-import LogoutButton from "./componenets/LogoutButton";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import CreatePost from "./componenets/CreatePost";
 function App() {
@@ -24,7 +23,6 @@ function App() {
        element={
         user ? (
           <>
-          <LogoutButton/>
           <UserPages/>
            <CreatePost/>
            </>

@@ -139,7 +139,7 @@ const replyToPost = async (req, res) =>{
         post.replies.push(reply);
         await post.save();
 
-        res.status(200).json(reply); 
+        res.json(reply); 
 
 
 

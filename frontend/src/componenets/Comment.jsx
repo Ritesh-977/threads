@@ -5,9 +5,9 @@ import { BiHide } from "react-icons/bi";
 import { MdBlock } from "react-icons/md";
 import { TbMessageReport } from "react-icons/tb";
 import useShowToast from "../hooks/useShowToast";
-import {  formatDistance, formatDistanceToNow } from "date-fns"
 
-const Comment = ({ reply, lastReply }) => {
+
+const Comment = ({ reply, lastReply}) => {
    
     const showToast = useShowToast();
     const handleCopy = ()=>{
@@ -30,8 +30,7 @@ const Comment = ({ reply, lastReply }) => {
                     <Flex w={'full'} justifyContent={'space-between'} alignItems={'center'}>
                         <Text fontSize={'sm'} fontWeight={'bold'}>{reply.username}</Text>
                         <Flex gap={3} alignItems={'center'}>
-                        
-                            <Text fontSize={'sm'} color={'gray.light'}>{formatDistance(reply.date, Date.now(), {addSuffix: true})}</Text>
+
                             <Box >
                                 <Menu>
                                     <MenuButton color="gray.light">

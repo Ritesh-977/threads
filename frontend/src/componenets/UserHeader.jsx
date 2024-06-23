@@ -6,7 +6,6 @@ import { FaLink } from "react-icons/fa";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdBlock } from "react-icons/md";
 import { TbMessageReport } from "react-icons/tb";
-import {useToast} from "@chakra-ui/toast";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useRecoilValue } from 'recoil';
@@ -36,17 +35,11 @@ const UserHeader = ({user}) => {  // This user is the  Profile visited user
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef()
 
-// Toast
-const toast = useToast(); 
+
 const copyURL = () =>{
   const currentURL = window.location.href;
   navigator.clipboard.writeText(currentURL).then(()=>{
-    toast({
-      title: "Copied",
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    })
+   showToast("Copied","","success");
   })
 }
 // 
@@ -132,7 +125,7 @@ const copyURL = () =>{
         </Flex>
         <Flex>
           <Box className="icon-container">
-            <BsInstagram size={24} cursor={'pointer'}/>
+           <Link target="_blank"  href ="https://www.instagram.com/">  < BsInstagram size={24} cursor={'pointer'}/> </Link>
           </Box>
           <Box className="icon-container">
             <Menu>
@@ -140,12 +133,12 @@ const copyURL = () =>{
               <CgMoreO size={24} cursor={'pointer'}/>
               </MenuButton>
               <Portal>
-                <MenuList bg={'gray.dark'}>
-                  <MenuItem icon={ <FaLink /> }  bg={'gray.dark'} onClick={copyURL}> Copy link  </MenuItem>
-                  <MenuItem icon={<BsInfoCircle />} bg={'gray.dark'} onClick={onOpen}> About this profile</MenuItem>
+                <MenuList bg={'#0e0e0e'}>
+                  <MenuItem icon={ <FaLink /> }   bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'} onClick={copyURL}> Copy link  </MenuItem>
+                  <MenuItem icon={<BsInfoCircle />}  bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'} onClick={onOpen}> About this profile</MenuItem>
                   <MenuDivider/>
-                  <MenuItem icon={ <MdBlock /> } color={'red'} bg={'gray.dark'}> Block </MenuItem>
-                  <MenuItem icon={<TbMessageReport />} color={'red'} bg={'gray.dark'}> Report </MenuItem>
+                  <MenuItem icon={ <MdBlock /> } color={'red'}  bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'}> Block </MenuItem>
+                  <MenuItem icon={<TbMessageReport />} color={'red'}  bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'}> Report </MenuItem>
                 </MenuList>
               </Portal> 
             </Menu>

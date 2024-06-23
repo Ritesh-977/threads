@@ -32,7 +32,7 @@ const postSchema = mongoose.Schema({
        userProfilePic:{
         type: String
        },
-       date:{
+       Date:{
         type: Date,
         default: Date.now
         },
