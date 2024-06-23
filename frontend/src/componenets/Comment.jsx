@@ -1,14 +1,18 @@
 import { Box, Avatar, Divider, Flex, Text , Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal} from "@chakra-ui/react"
 import { BsThreeDots } from "react-icons/bs";
 import { FaRegCopy } from "react-icons/fa";
-import { BiHide } from "react-icons/bi";
 import { MdBlock } from "react-icons/md";
-import { TbMessageReport } from "react-icons/tb";
+import { FaRegEdit } from "react-icons/fa";
+import { MdOutlineDelete } from "react-icons/md";
 import useShowToast from "../hooks/useShowToast";
+import {  useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 
 const Comment = ({ reply, lastReply}) => {
-   
+    const user = useRecoilValue(userAtom);
+    const navigate = useNavigate();
     const showToast = useShowToast();
     const handleCopy = ()=>{
         try {
@@ -20,15 +24,29 @@ const Comment = ({ reply, lastReply}) => {
             showToast("Error", error.message,"error");
         }
     }
- 
+//    if(!user) return null;
     return (
         <>
            {console.log(reply)}
             <Flex gap={4} py={2} my={2} w={'full'}>
-                <Avatar src={reply.userProfilePic} />
+                <Avatar 
+                 cursor={'pointer'}
+                onClick={(e) => {
+                    e.preventDefault();
+                    navigate(`/${reply.username}`);
+                }}
+                src={reply.userProfilePic} />
                 <Flex gap={1} w={'full'} flexDirection={'column'}>
                     <Flex w={'full'} justifyContent={'space-between'} alignItems={'center'}>
-                        <Text fontSize={'sm'} fontWeight={'bold'}>{reply.username}</Text>
+                        <Text 
+                           cursor={'pointer'}
+                           _hover={{textDecoration:"underline"}}
+                           onClick={(e) => {
+                            e.preventDefault();
+                            navigate(`/${reply.username}`);
+                        }}
+                          
+                        fontSize={'sm'} fontWeight={'bold'}>{reply.username}</Text>
                         <Flex gap={3} alignItems={'center'}>
 
                             <Box >
@@ -39,10 +57,14 @@ const Comment = ({ reply, lastReply}) => {
                                     <Portal>
                                         <MenuList bg={'gray.dark'}>
                                             <MenuItem icon={<FaRegCopy />} bg={'gray.dark'} onClick={handleCopy} > Copy comment  </MenuItem>
-                                            <MenuItem icon={<BiHide />} bg={'gray.dark'} > Hide Comment </MenuItem>
+                                            { (user?.username === reply.username) ?  <MenuItem icon={<FaRegEdit />} bg={'gray.dark'} > Edit Comment </MenuItem>  : null }
+
+                                           
                                             <MenuDivider />
-                                            <MenuItem icon={<MdBlock />} color='red' bg={'gray.dark'}> Block </MenuItem>
-                                            <MenuItem icon={<TbMessageReport />} color={'red'} bg={'gray.dark'}> Delete </MenuItem>
+                                            <MenuItem icon={<MdBlock />} color='red' bg={'gray.dark'}> Report </MenuItem>
+
+                                           { (user?.username === reply.username) ?  <MenuItem icon={<MdOutlineDelete  />} color={'red'} bg={'gray.dark'}> Delete </MenuItem> : null }
+  
                                         </MenuList>
                                     </Portal>
                                 </Menu>

@@ -34,7 +34,7 @@ const UserPages = () => {
      getPosts();
 
   },[username, showToast, setPosts]);
-    console.log("Posts is here ", posts);
+  
   if(!user && loading){
     return (
       <Flex justifyContent={'center'}><Spinner size={'md'} /></Flex>

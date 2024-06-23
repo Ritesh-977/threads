@@ -2,7 +2,6 @@ import { Avatar, Box, Flex, Image, Text, Menu, MenuButton, MenuDivider, MenuItem
 import { BsThreeDots } from "react-icons/bs";
 import { FaLink } from "react-icons/fa";
 import { RiSaveLine } from "react-icons/ri";
-import { IoHeartDislikeOutline } from "react-icons/io5";
 import Actions from "../componenets/Actions";
 import { useEffect } from "react";
 import { formatDistanceToNowStrict} from "date-fns";
@@ -15,6 +14,7 @@ import {DeleteIcon} from "@chakra-ui/icons";
 import Comment from "../componenets/Comment";
 import {saveAs} from 'file-saver';
 import postsAtom from "../atoms/postsAtom";
+import { FaRegEdit } from "react-icons/fa";
 
 const PostPage = () => {
   const showToast = useShowToast();
@@ -103,7 +103,7 @@ const PostPage = () => {
                 <MenuList bg={'gray.dark'}>
                 
                   <MenuItem icon={<RiSaveLine />} bg={'gray.dark'} onClick={downloadImg}> Save </MenuItem>
-                  <MenuItem icon={< IoHeartDislikeOutline  />} bg={'gray.dark'} > Hide like </MenuItem>
+                  <MenuItem icon={<FaRegEdit />  } bg={'gray.dark'} > Edit Post </MenuItem>
                   <MenuDivider />
                   { currentUser?._id === user._id &&  <MenuItem color={'red'} bg={'gray.dark'} onClick={handleDeletePost} icon=  { <DeleteIcon /> }> Delete</MenuItem>  }
                   {currentUser?._id === user._id && <MenuDivider/>}
