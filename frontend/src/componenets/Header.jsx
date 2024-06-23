@@ -1,6 +1,6 @@
-import { Flex, Image , useColorMode, Link, Menu, MenuButton, MenuList, MenuItem, IconButton, Text, MenuDivider} from "@chakra-ui/react"
+import { Flex, Image , useColorMode, Link, Menu, MenuButton, MenuList, MenuItem, IconButton, Text, MenuDivider, Button} from "@chakra-ui/react"
 import userAtom from "../atoms/userAtom";
-import { Link as RouterLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { AiFillHome } from 'react-icons/ai';
 import { RxAvatar } from 'react-icons/rx';
 import { useRecoilValue } from "recoil";
@@ -8,16 +8,18 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import useLogout from "../hooks/useLogout";
 
 const Header = () => {
+  
     const logout = useLogout();
     const user = useRecoilValue(userAtom);
     const {colorMode, toggleColorMode} = useColorMode();
   return (
     <Flex justifyContent={"space-between"} mt={"6"} mb={"12"} >
       {user && (
-        <Link as = {RouterLink} to = "/">
+        <NavLink  to = "/">
           <AiFillHome size={24} />
-        </Link>
+        </NavLink>
       )}
+    
      <Image 
       cursor={"pointer"}
       alt="logo"
@@ -28,9 +30,9 @@ const Header = () => {
       {user && (
         <Flex alignItems={'center'} gap={9}>
 
-        <Link as = {RouterLink} to ={`/${user.username}`}>
+        <NavLink  to = {`/${user.username}`}>
           <RxAvatar size={24} />
-        </Link>
+        </NavLink>
 
   <Menu>
   <MenuButton
@@ -53,10 +55,13 @@ const Header = () => {
     </MenuItem>
   </MenuList>
 </Menu>
-
-      
          
         </Flex>
+      )}
+      {!user && (
+        <NavLink  to = "/auth">
+         <Button >Login</Button>
+        </NavLink>
       )}
     </Flex>
   )

@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 
 
-const Comment = ({ reply, lastReply}) => {
+const Comment = ({ reply}) => {
     const user = useRecoilValue(userAtom);
     const navigate = useNavigate();
     const showToast = useShowToast();
@@ -73,10 +73,12 @@ const Comment = ({ reply, lastReply}) => {
                     </Flex>
 
                     <Text>{reply.text}</Text>
+                  
                 </Flex>
+               
             </Flex>
+            <Divider/>
 
-          {!lastReply ? <Divider /> : <div> <br /> <br /> </div> }
         </>
     )
 }

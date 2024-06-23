@@ -154,6 +154,7 @@ const followUnfollowUser = async (req, res)=>{
 
 // Update User's detail
 const updateUser = async (req, res)=>{
+    
     const {name, email, username, password, bio, website} = req.body;
     let { profilePic } = req.body;
     const userId = req.user._id;
@@ -181,8 +182,8 @@ const updateUser = async (req, res)=>{
         user.username = username || user.username;
         user.email = email || user.email;
         user.profilePic = profilePic || user.profilePic;
-        user.bio = bio || user.bio;
-        user.website = website || user.website;
+        user.bio = bio ;
+        user.website = website;
 
         user = await user.save();
 

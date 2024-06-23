@@ -11,6 +11,7 @@ const Post = ({ post, postedBy }) => {
     const [user, setUser] = useState(null);
     const showToast = useShowToast();
     useEffect(() => {
+        
         const getUser = async () => {
             try {
                 const res = await fetch("/api/users/profile/" + postedBy);

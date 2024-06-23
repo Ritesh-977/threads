@@ -119,7 +119,7 @@ const copyURL = () =>{
     
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
-        <Text color={"gray.light"}>{user.followers.length} followers</Text>
+        <Text _hover={{fontStyle:"underline"}} color={"gray.light"}>{user.followers.length} followers</Text>
         { user.website && <Box w={'1'} h={'1'} bg={'gray.light'} borderRadius={'full'}></Box> }
         <Link color={'gray.light'} target="_blank" href={user.website}>{user.website}</Link>
         </Flex>

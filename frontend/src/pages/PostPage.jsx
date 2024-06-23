@@ -72,6 +72,16 @@ const PostPage = () => {
     }
 }
 
+// PENDING
+const handlePost = async () =>{
+  try {
+    
+  } catch (error) {
+    showToast("Error", data.error, "error");
+    return;
+  }
+}
+
   if(!user && loading) {
     return (
       <Flex justifyContent={'center'}>
@@ -103,7 +113,7 @@ const PostPage = () => {
                 <MenuList bg={'gray.dark'}>
                 
                   <MenuItem icon={<RiSaveLine />} bg={'gray.dark'} onClick={downloadImg}> Save </MenuItem>
-                  <MenuItem icon={<FaRegEdit />  } bg={'gray.dark'} > Edit Post </MenuItem>
+                  <MenuItem icon={<FaRegEdit />  } bg={'gray.dark'} onClick={handlePost}> Edit Caption </MenuItem>
                   <MenuDivider />
                   { currentUser?._id === user._id &&  <MenuItem color={'red'} bg={'gray.dark'} onClick={handleDeletePost} icon=  { <DeleteIcon /> }> Delete</MenuItem>  }
                   {currentUser?._id === user._id && <MenuDivider/>}

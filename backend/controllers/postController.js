@@ -88,6 +88,34 @@ const deletePost = async (req, res)=>{
    }
 }
 
+//Edit Posts
+const editPostCaptions = async (req, res) =>{
+    try {
+        
+        const {text} = req.body;
+        let post = await Post.findById(req.params.id);
+        if(!post){
+           return res.status(404).json({error: "Post not found"});
+        }
+        if(post.postedBy.toString() !== req.user._id.toString()){
+            return res.status(401).json({error: "Unauthorized to edit post"});
+        }
+    
+        post.text = post.text || text;
+    
+        post = await post.save();
+    
+        res.json(post)  ;
+    
+
+    } catch (err) {
+        res.status(500).json({error: err.message})
+        console.log("Error in ediyPostCaptions: ", err.message)
+    }
+  
+}
+
+
 // Like Unlike Post
 const likeUnlikePost = async (req, res)=>{
   try {
@@ -187,4 +215,7 @@ const getUserPosts = async (req, res) =>{
     }
 }
 
-export {createPost, getPost , deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts};
+
+
+
+export {createPost, getPost , deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts, editPostCaptions};

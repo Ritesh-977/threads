@@ -89,8 +89,7 @@ const Actions = ({post}) => {
 			});
 			setPosts(updatedPosts);
 			showToast("Success", "Reply posted successfully", "success");
-
-			console.log(data);
+			
 			onClose();
 			setReply("");
 		} catch (error) {
