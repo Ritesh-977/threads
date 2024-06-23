@@ -34,7 +34,7 @@ const Homepage = () => {
       {!loading && posts.length === 0 && <h1>Follow someone to see some posts</h1>}
       {loading && (
         <Flex justifyContent={'center'}>
-          <Spinner size={'lg'}/>
+          <Spinner size={'md'}/>
         </Flex>
       )}
 

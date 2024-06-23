@@ -5,7 +5,7 @@ const usePreviewImg = () => {
     const [imgUrl, setImgUrl] = useState(null);
     const handleImageChange = (e)=>{
       const file = e.target.files[0];
-      if(file && file.type.startsWith("image/")){
+      if(file &&  file.type.startsWith("image/") ){
         const reader = new FileReader();
 
         reader.onloadend = ()=>{

@@ -26,14 +26,16 @@ const createPost = async (req, res)=>{
         }
 
         if(img){
-            const uploadResponse = await cloudinary.uploader.upload(img);
+            const uploadResponse = await cloudinary.uploader.upload_large(img,
+                {resource_type: "auto"},
+            );
             img = uploadResponse.secure_url;
         }
 
         const newPost = new Post({postedBy, text, img });
         await newPost.save();
 
-        res.status(201).json({message : "Post created successfully", newPost});
+        res.status(201).json(newPost );
 
         
     } catch (err) {
@@ -51,7 +53,7 @@ const getPost = async (req, res)=>{
             res.status(404).json({error: "Post not found"})
         }
         
-        res.json({message : "Post found", post})
+        res.json(post)
 
     } catch (err) {
         res.status(500).json({error: err.message})
@@ -69,6 +71,12 @@ const deletePost = async (req, res)=>{
     if(post.postedBy.toString() !== req.user._id.toString()){
         return res.status(401).json({error: "Unauthorized to delete post"});
     }
+
+    if(post.img){
+       const imgId = post.img.split("/").pop().split(".")[0]; 
+       await cloudinary.uploader.destroy(imgId);
+    }
+
     await Post.findByIdAndDelete(req.params.id);
     
     return res.json({message : "Post delete successfully"});
@@ -131,7 +139,7 @@ const replyToPost = async (req, res) =>{
         post.replies.push(reply);
         await post.save();
 
-        res.status(200).json({message : "Reply added successfully", post});
+        res.status(200).json(reply); 
 
 
 
@@ -163,5 +171,20 @@ const getFeedPosts = async (req, res)=>{
     }
 }
 
+//
+const getUserPosts = async (req, res) =>{
+    const { username } = req.params;
+    try {
+        const user = await User.findOne({username});
+        if(!user){
+            return res.status(404).json({error: "User not found"});
+        }
+        const posts = await Post.find({postedBy: user._id}).sort({ createdAt: -1});
+        res.json(posts);
+        
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
 
-export {createPost, getPost , deletePost, likeUnlikePost, replyToPost, getFeedPosts};
+export {createPost, getPost , deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts};

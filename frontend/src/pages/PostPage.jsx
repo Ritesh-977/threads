@@ -1,73 +1,134 @@
-import { Avatar, Box, Flex, Image, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Divider, Button } from "@chakra-ui/react"
+import { Avatar, Box, Flex, Image, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Divider, Button, Spinner } from "@chakra-ui/react"
 import { BsThreeDots } from "react-icons/bs";
 import { FaLink } from "react-icons/fa";
 import { RiSaveLine } from "react-icons/ri";
-import { MdBlock } from "react-icons/md";
-import { TbMessageReport } from "react-icons/tb";
+import { IoHeartDislikeOutline } from "react-icons/io5";
 import Actions from "../componenets/Actions";
-import {useToast} from "@chakra-ui/toast";
-import { useState } from "react";
+import { useEffect } from "react";
+import { formatDistanceToNowStrict} from "date-fns";
+import useGetUserProfile from '../hooks/useGetUserProfile';
+import useShowToast from "../hooks/useShowToast";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
+import {DeleteIcon} from "@chakra-ui/icons"; 
 import Comment from "../componenets/Comment";
+import {saveAs} from 'file-saver';
+import postsAtom from "../atoms/postsAtom";
 
 const PostPage = () => {
-  const [liked, setLiked] = useState(false);
-  const toast = useToast(); 
+  const showToast = useShowToast();
+  const {user, loading} = useGetUserProfile();
+  const [posts, setPosts] = useRecoilState(postsAtom);
+  const { pid } = useParams();
+  const currentUser = useRecoilValue(userAtom);
+  const navigate = useNavigate();
+  const currentPost = posts[0];
+  useEffect(()=>{
+    const getPost = async () =>{
+      try {
+        const res = await fetch(`/api/posts/${pid}`);
+        const data = await res.json();
+        if(data.error){
+          showToast("Error", data.error, "error");
+        }
+        setPosts([data]);
+      } catch (error) {
+        showToast("Error", error.message, "error");
+      }
+    }
+    getPost();
+  },[showToast, pid, setPosts]);
+
   const copyURL = () =>{
     const currentURL = window.location.href;
     navigator.clipboard.writeText(currentURL).then(()=>{
-      toast({
-        title: "Copied",
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
+      showToast("Copied","","success");
     })
   }
+
+  const downloadImg = () => {
+    saveAs({userProfilePic}, 'image.jpg')
+  }
+
+  const handleDeletePost = async ()=>{
+    try {
+
+        if(!window.confirm("Are you sure you want to delete this post ?")) return;
+
+        const res = await fetch(`/api/posts/${currentPost._id}`,{
+            method: "DELETE",
+        });
+        const data = await res.json();
+        if(data.error){
+            showToast("Error", data.error, "error");
+            return;
+        }
+        showToast("Success", "Post deleted", "success");
+        navigate(`/${user.username}`);
+    } catch (error) {
+        showToast("Error", error.message, "error");
+    }
+}
+
+  if(!user && loading) {
+    return (
+      <Flex justifyContent={'center'}>
+        <Spinner size={'md'}/>
+      </Flex>
+    )
+  }
+  if(!currentPost) return null;
   return (
     <>
       <Flex>
         <Flex w={'full'} alignItems={'center'} gap={3}>
-          <Avatar src="/zuck-avatar.png" size={'md'} name="Mark Zuckerberg" />
+          <Avatar src={user.profilePic} size={'md'} name={user.name} />
           <Flex>
-            <Text fontSize={'sm'} fontWeight={'bold'}>zuckerberg</Text>
+            <Text fontSize={'sm'} fontWeight={'bold'}>{user.username}</Text>
             <Image src="/verified.png" w={4} h={4} ml={1} />
           </Flex>
         </Flex>
         <Flex gap={4} alignItems={'center'}>
-          <Text fontSize={'sm'} color={'gray.light'}>1d</Text>
+        <Text textAlign={'right'} fontSize={'sm'} w={36} color={'gray.light'}>
+          {formatDistanceToNowStrict(new Date(currentPost.createdAt)) } ago
+        </Text>
           <Box className="icon-container">
             <Menu>
-              <MenuButton>
+              <MenuButton >
                 <BsThreeDots size={24} cursor={'pointer'} />
               </MenuButton>
               <Portal>
                 <MenuList bg={'gray.dark'}>
-                  <MenuItem icon={<FaLink />} bg={'gray.dark'} onClick={copyURL} > Copy link  </MenuItem>
-                  <MenuItem icon={<RiSaveLine />} bg={'gray.dark'} > Save </MenuItem>
+                
+                  <MenuItem icon={<RiSaveLine />} bg={'gray.dark'} onClick={downloadImg}> Save </MenuItem>
+                  <MenuItem icon={< IoHeartDislikeOutline  />} bg={'gray.dark'} > Hide like </MenuItem>
                   <MenuDivider />
-                  <MenuItem icon={<MdBlock />} color='red' bg={'gray.dark'}> Block </MenuItem>
-                  <MenuItem icon={<TbMessageReport />} color={'red'} bg={'gray.dark'}> Report </MenuItem>
+                  { currentUser?._id === user._id &&  <MenuItem color={'red'} bg={'gray.dark'} onClick={handleDeletePost} icon=  { <DeleteIcon /> }> Delete</MenuItem>  }
+                  {currentUser?._id === user._id && <MenuDivider/>}
+                  <MenuItem icon={<FaLink />} bg={'gray.dark'} onClick={copyURL}> Copy link  </MenuItem>
                 </MenuList>
               </Portal>
             </Menu>
           </Box>
         </Flex>
       </Flex>
-      <Text fontSize={'sm'}> Let's talk about Threads. </Text>
-      <Box
-        borderRadius={6}
-        overflow={'hidden'}
-        border={'1px solid'}
-        borderColor={'gray.light'} >
-        <Image src='/post1.png' w={'full'} />
+      <Text fontSize={'sm'}>{currentPost.text} </Text>
+      {currentPost.img && (
+          <Box >                      
+          <Image   
+          borderRadius={6}
+          overflow={'hidden'}
+          border={'1px solid'}
+          maxH={'500px'} 
+          borderColor={'gray.light'}
+          src={currentPost.img} />
       </Box>
+      )}
+    
 
       <Flex gap={3} my={3} cursor={'pointer'}>
-        <Actions liked={liked} setLiked={setLiked} likes={342} />
-      </Flex>
-
-      <Flex gap={2} alignItems={"center"}>
-        <Text color={'gray.light'} fontSize={'sm'} > 341 replies</Text>
+        <Actions post={currentPost} />
       </Flex>
 
       <Divider my={4}/>
@@ -79,32 +140,21 @@ const PostPage = () => {
         </Flex>
         <Button>Get</Button>
       </Flex>
+      <Flex mt={2} mb={-1}>
+        <Text fontWeight={'bold'}>Replies</Text>
+      </Flex>
 
       <Divider my={4}/>
   
-      <Comment 
-      comment = "Looks really Good!"
-      createdAt = '2d'
-      likes = {15}
-      username = 'johndoe'
-      userAvatar = 'https://bit.ly/dan-abramov'
-      />
-  
-      <Comment 
-      comment = "Excellent Work"
-      createdAt = '1d'
-      likes = {21}
-      username = 'kentdodds'
-      userAvatar = 'https://bit.ly/kent-c-dodds'
-      />
-  
-      <Comment 
-      comment = "Nice"
-      createdAt = '3d'
-      likes = {5}
-      username = 'prosper'
-      userAvatar = 'https://bit.ly/prosper-baba'
-      />
+      {currentPost.replies.map((reply) =>(
+     <Comment
+        key = {reply._id}
+        reply = {reply}
+        lastReply = {reply._id === currentPost.replies[currentPost.replies.length-1]._id}
+      /> 
+      ))}
+      
+
 
     </>
   )

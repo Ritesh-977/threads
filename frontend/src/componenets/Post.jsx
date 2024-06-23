@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom"
-import { Avatar, Box, Flex, Image, Text} from "@chakra-ui/react";
+import { Image, Box, Avatar,  Flex, Text } from "@chakra-ui/react"
 import Actions from "./Actions";
 import { useEffect, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { formatDistanceToNowStrict} from "date-fns";
 
+
 const Post = ({ post, postedBy }) => {
     const navigate = useNavigate();
-    const [liked, setLiked] = useState(false);
     const [user, setUser] = useState(null);
     const showToast = useShowToast();
     useEffect(() => {
@@ -24,11 +24,11 @@ const Post = ({ post, postedBy }) => {
                 showToast("Error", error.message, "error");
                 setUser(null);
             }
-        }
+        };
         getUser();
-    }, [postedBy, showToast])
+    }, [postedBy, showToast]);
 
-
+    
     if (!user) return null;
     return (
         <Link to={`/${user.username}/post/${post._id}`}>
@@ -41,33 +41,33 @@ const Post = ({ post, postedBy }) => {
                         }} size={'md'} name={user.name} src={user?.profilePic} />
                     <Box w={'1px'} h={'full'} bg={'gray.light'} my={2}></Box>
                     <Box position={'relative'} w={'full'}>
-                        {post.replies[0] && (
+                        {post.replies[2] && (
                             <Avatar
                                 size={'xs'}
-                                name="John doe"
-                                src={post.replies[0].userProfilePic}
+                                name={user.name}
+                                src={post.replies[2].userProfilePic}
                                 position="absolute"
                                 top={'0px'}
                                 left={'15px'}
                                 padding={'2px'}
                             />
                         )}
-                        {post.replies[1] && (
+                        {post.replies[0] && (
                             <Avatar
                                 size={'xs'}
-                                name="Kent Dodds"
-                                src={post.replies[1].userProfilePic}
+                                name={user.name}
+                                src={post.replies[0].userProfilePic}
                                 position="absolute"
                                 bottom={'0px'}
                                 right={'-5px'}
                                 padding={'2px'}
                             />)}
 
-                        {post.replies[2] && (
+                        {post.replies[1] && (
                             <Avatar
                                 size={'xs'}
-                                name="Ryan Florence"
-                                src={post.replies[2].userProfilePic}
+                                name={user.name}
+                                src={post.replies[1].userProfilePic}
                                 position="absolute"
                                 bottom={'0px'}
                                 left={'4px'}
@@ -91,24 +91,24 @@ const Post = ({ post, postedBy }) => {
 
                             <Text textAlign={'right'} fontSize={'sm'} w={36} color={'gray.light'}>
                             {formatDistanceToNowStrict(new Date(post.createdAt)) } ago
-                            </Text>
+                            </Text> 
 
                         </Flex>
                     </Flex>
                     <Text fontSize={'sm'}> {post.text} </Text>
-                    {post.img && <Box
+                    {post.img && <Box >                      
+                        <Image   
                         borderRadius={6}
                         overflow={'hidden'}
-                        border={'1px solid'}
-                        borderColor={'gray.light'} >
-
-                        <Image src={post.img} w={'full'} />
+                        border={'1px solid'} 
+                        maxH={'500px'} 
+                        borderColor={'gray.light'}
+                        src={post.img} />
                     </Box>}
                     <Flex gap={3} my={1}>
                         <Actions post = {post} />
                     </Flex>
-                   
-                </Flex>
+                                   </Flex>
             </Flex>
         </Link>
     )

@@ -28,7 +28,7 @@ const UserHeader = ({user}) => {  // This user is the  Profile visited user
 
   const currentUser = useRecoilValue(userAtom); // Currently logged in user
 
-  const [following, setFollowing] = useState(user.followers.includes(currentUser._id));
+  const [following, setFollowing] = useState(user.followers.includes(currentUser?._id));
 
   const [updating, setUpdating] = useState(false);
 
@@ -74,7 +74,7 @@ const copyURL = () =>{
         user.followers.pop();
        }
        else{
-        user.followers.push(currentUser._id);
+        user.followers.push(currentUser?._id);
        }
        setFollowing(!following);
 
@@ -157,7 +157,7 @@ const copyURL = () =>{
       <Flex w={'full'} >
 
      
-        {currentUser._id === user._id && (
+        {currentUser?._id === user._id && (
            <Flex flex={1} justifyContent={'center'} pb={3}>
           <Link as ={RouterLink} to="/update">
           <Button 
@@ -169,7 +169,7 @@ const copyURL = () =>{
         </Link>  </Flex> )}
        
         <Flex flex={1} justifyContent={'center'} pb={3}>
-        {currentUser._id !== user._id && (
+        {currentUser?._id !== user._id && (
           <Button 
            size='md'
            height='37px'
@@ -184,7 +184,7 @@ const copyURL = () =>{
         </Flex>
 
         <Flex flex={1} justifyContent={'center'}>
-        {currentUser._id !== user._id && (
+        {currentUser?._id !== user._id && (
         // <Link as ={RouterLink} to="/">
           <Button 
           border={"1px solid"}

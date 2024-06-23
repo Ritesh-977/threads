@@ -32,7 +32,11 @@ const postSchema = mongoose.Schema({
        userProfilePic:{
         type: String
        },
-       username:{
+       date:{
+        type: Date,
+        default: Date.now
+        },
+        username:{
         type: String
        }
     }

@@ -12,9 +12,10 @@ import {
 import { useRef, useState } from "react";
 import usePreviewImg from "../hooks/usePreviewImg";
 import { BsFillImageFill } from "react-icons/bs";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useShowToast from "../hooks/useShowToast";
+import postsAtom from "../atoms/postsAtom";
 
 const MAX_CHAR = 500;
 
@@ -27,6 +28,8 @@ const CreatePost = () => {
     const imageRef = useRef(null);
     const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
     const user = useRecoilValue(userAtom);
+    const [posts, setPosts] = useRecoilState(postsAtom);
+
     const handleTextChange = (e)=>{
         const inputText = e.target.value;
 
@@ -39,6 +42,7 @@ const CreatePost = () => {
             setRemainingChar(MAX_CHAR - inputText.length);
         }
     };
+
     const handleCreatePost = async ()=>{
         setLoading(true)
       try {
@@ -55,6 +59,7 @@ const CreatePost = () => {
             return;
         }
         showToast("Success", "Post created successfully", "success")
+        setPosts([data, ...posts]);
         onClose();
         setPostText("");
         setImgUrl("");
@@ -64,6 +69,7 @@ const CreatePost = () => {
         setLoading(false)
       }
     };
+
   return (
     <>
     <Button
@@ -71,10 +77,10 @@ const CreatePost = () => {
     position={"fixed"}
     bottom={10}
     right={10}
-    leftIcon={<AddIcon/>}
     bg={useColorModeValue("gray.400", "gray.dark")}
+    size={{base: 'sm', sm:"lg"}}
     >
-      Post
+    <AddIcon/>
     </Button>
     <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -103,7 +109,10 @@ const CreatePost = () => {
             </FormControl>
             {imgUrl && (
                 <Flex mt={5} w={'full'} position={'relative'} >
-                    <Image src={imgUrl} alt="Selected img"/>
+                   
+                   {/* <video width={"150px"} src={imgUrl} alt="Selected img" />  */}
+                    <Image src={imgUrl} alt="Selected img"/> 
+                    {console.log(imgUrl)};
                     <CloseButton onClick={()=>{setImgUrl("")}} bg={'gray.800'} position={'absolute'} top={2} right={2} />
                 </Flex>
             )}

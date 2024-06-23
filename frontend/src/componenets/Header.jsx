@@ -9,7 +9,7 @@ const Header = () => {
     const user = useRecoilValue(userAtom);
     const {colorMode, toggleColorMode} = useColorMode();
   return (
-    <Flex justifyContent={"space-between"} mt={"6"} mb={"12"}>
+    <Flex justifyContent={"space-between"} mt={"6"} mb={"12"} >
       {user && (
         <Link as = {RouterLink} to = "/">
           <AiFillHome size={24} />
