@@ -1,4 +1,4 @@
-import { Avatar, Divider, Flex, Image, Skeleton, SkeletonCircle, Spacer, Text, useColorModeValue } from '@chakra-ui/react'
+import { Avatar, AvatarBadge, Divider, Flex, Image, Skeleton, SkeletonCircle, Spacer, Text, WrapItem, useColorModeValue } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Message from './Message';
 import MessageInput from './MessageInput';
@@ -9,7 +9,7 @@ import userAtom from '../atoms/userAtom';
 import {  useNavigate } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
 
-const MessageContainer = () => {
+const MessageContainer = ({isOnline}) => {
   const showToast = useShowToast();
   const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
   const [loadingMessages, setLoadingMessages] = useState(true);
@@ -48,7 +48,12 @@ const MessageContainer = () => {
     >
       {/* Message header */}
       <Flex w={'full'} h={12} alignItems={'center'} gap={2}>
-      <Avatar cursor={'pointer'} onClick={(e) => { e.preventDefault();  navigate(`/${selectedConversation.username}`); }}  src={selectedConversation.userProfilePic} size={'sm'}/>
+      <WrapItem>
+        {console.log(isOnline)}
+      <Avatar cursor={'pointer'} onClick={(e) => { e.preventDefault();  navigate(`/${selectedConversation.username}`) }}  src={selectedConversation.userProfilePic} size={'sm'}> 
+      {isOnline ?  <AvatarBadge boxSize={'1em'} bg={'green.500'} /> : ""}
+      </Avatar>
+      </WrapItem>
       <Text cursor={'pointer'} _hover={{textDecoration:'underline'}} onClick={(e) => { e.preventDefault();  navigate(`/${selectedConversation.username}`); }} display={'flex'} alignItems={'center'}  > {selectedConversation.username} <Image src='/verified.png' w={4} h={4} ml={1}/></Text>
       <Spacer />
       <Flex mr={2}>
