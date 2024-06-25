@@ -1,4 +1,4 @@
-import { Avatar, Divider, Flex, Image, Skeleton, SkeletonCircle, Text, useColorModeValue } from '@chakra-ui/react'
+import { Avatar, Divider, Flex, Image, Skeleton, SkeletonCircle, Spacer, Text, useColorModeValue } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Message from './Message';
 import MessageInput from './MessageInput';
@@ -6,6 +6,8 @@ import useShowToast from '../hooks/useShowToast';
 import { selectedConversationAtom } from '../atoms/messagesAtom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
+import {  useNavigate } from 'react-router-dom';
+import { IoClose } from "react-icons/io5";
 
 const MessageContainer = () => {
   const showToast = useShowToast();
@@ -13,7 +15,7 @@ const MessageContainer = () => {
   const [loadingMessages, setLoadingMessages] = useState(true);
   const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
-
+  const navigate = useNavigate();
 
   useEffect(()=>{
    
@@ -46,10 +48,14 @@ const MessageContainer = () => {
     >
       {/* Message header */}
       <Flex w={'full'} h={12} alignItems={'center'} gap={2}>
-      <Avatar src={selectedConversation.userProfilePic} size={'sm'}/>
-      <Text display={'flex'} alignItems={'center'}  > {selectedConversation.username} <Image src='/verified.png' w={4} h={4} ml={1}/></Text>
+      <Avatar cursor={'pointer'} onClick={(e) => { e.preventDefault();  navigate(`/${selectedConversation.username}`); }}  src={selectedConversation.userProfilePic} size={'sm'}/>
+      <Text cursor={'pointer'} _hover={{textDecoration:'underline'}} onClick={(e) => { e.preventDefault();  navigate(`/${selectedConversation.username}`); }} display={'flex'} alignItems={'center'}  > {selectedConversation.username} <Image src='/verified.png' w={4} h={4} ml={1}/></Text>
+      <Spacer />
+      <Flex mr={2}>
+      <IoClose onClick={(e) => { location.reload();}} cursor={'pointer'} size={20} />
       </Flex>
-
+      </Flex>
+       
       <Divider/>
      
      <Flex flexDir={'column'} p={2} gap={4} my={4} height={'400px'} overflowY={'auto'}>

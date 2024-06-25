@@ -7,8 +7,8 @@ import { BsInfoCircle } from "react-icons/bs";
 import { MdBlock } from "react-icons/md";
 import { TbMessageReport } from "react-icons/tb";
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
-import { useRecoilValue } from 'recoil';
+import { NavLink, Link as RouterLink, useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from './../atoms/userAtom';
 import {
   AlertDialog,
@@ -20,8 +20,15 @@ import {
   AlertDialogCloseButton,
 } from '@chakra-ui/react';
 import useShowToast from "../hooks/useShowToast";
+import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAtom";
+import Conversation from "./Conversation";
 
 const UserHeader = ({user}) => {  // This user is the  Profile visited user
+
+
+  const [conversations,setConversations] = useRecoilState(conversationsAtom);
+  const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
+  const [messagingUser, setMessagingUser] = useState(false);
 
   const showToast = useShowToast();
 
@@ -77,6 +84,55 @@ const copyURL = () =>{
        setUpdating(false);
     }
    }
+//
+ const handleMessageBox = () => {
+  setMessagingUser(true);
+  try {
+    const conversationAlreadyExist = conversations.find(conversation => conversation.participants[0]._id === user._id)
+    if(conversationAlreadyExist){
+        setSelectedConversation({
+        _id : conversationAlreadyExist._id,
+        userId: user._id,
+        username: user.username,
+        userProfilePic: user.profilePic,
+    });
+    return;
+    };
+  
+    const mockConversation = {
+        mock: true,
+        lastMessage: {
+            text: "",
+            sender: ""
+        },
+        _id: Date.now(),
+        participants: [
+            {
+                _id: user._id,
+                username: user.username,
+                profilePic: user.profilePic,
+            },
+        ],
+    };
+
+    setSelectedConversation({
+      _id: user._id,
+      userId: user._id,
+      userProfilePic: user.profilePic,
+      username: user.username,
+      mock: true,
+    })
+    setConversations((prevConvs) => [...prevConvs, mockConversation]);  
+    
+  } catch (error) {
+    showToast("Error", error.message, "error");
+  } finally{
+    setMessagingUser(false);
+  }
+ 
+ }
+
+
 //
  let dt = new Date(user.createdAt);
  dt = dt.toGMTString();
@@ -178,15 +234,17 @@ const copyURL = () =>{
 
         <Flex flex={1} justifyContent={'center'}>
         {currentUser?._id !== user._id && (
-        // <Link as ={RouterLink} to="/">
+        <NavLink  to="/chat">
           <Button 
+          isLoading = {messagingUser}
           border={"1px solid"}
           borderColor={"#595353"}
           size='md'
            height='37px'
            width='280px'
-          borderRadius={'10px'} > Message</Button>
-        // </Link> 
+          borderRadius={'10px'} 
+          onClick={handleMessageBox}> Message</Button>
+         </NavLink> 
         )}
         </Flex>
       </Flex>
