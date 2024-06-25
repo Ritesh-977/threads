@@ -1,4 +1,4 @@
-import { Avatar, Divider, Flex, Image, Skeleton, SkeletonCircle, Text, useColorModeValue } from "@chakra-ui/react";
+import { Avatar, AvatarBadge, Divider, Flex, Image, Skeleton, SkeletonCircle, Spacer, Text, WrapItem, useColorModeValue } from "@chakra-ui/react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
 import { useEffect, useRef, useState } from "react";
@@ -7,8 +7,10 @@ import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAt
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext.jsx";
+import { useNavigate } from 'react-router-dom';
+import { IoClose } from "react-icons/io5";
 
-const MessageContainer = () => {
+const MessageContainer = ({isOnline}) => {
 	const showToast = useShowToast();
 	const selectedConversation = useRecoilValue(selectedConversationAtom);
 	const [loadingMessages, setLoadingMessages] = useState(true);
@@ -17,6 +19,7 @@ const MessageContainer = () => {
 	const { socket } = useSocket();
 	const setConversations = useSetRecoilState(conversationsAtom);
 	const messageEndRef = useRef(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		socket.on("newMessage", (message) => {
@@ -108,10 +111,18 @@ const MessageContainer = () => {
 		>
 			{/* Message header */}
 			<Flex w={"full"} h={12} alignItems={"center"} gap={2}>
-				<Avatar src={selectedConversation.userProfilePic} size={"sm"} />
-				<Text display={"flex"} alignItems={"center"}>
+				<WrapItem>
+				<Avatar cursor={'pointer'} onClick={(e) => { e.preventDefault(); navigate(`/${selectedConversation.username}`) }} src={selectedConversation.userProfilePic} size={"sm"} >
+				{isOnline ?  <AvatarBadge boxSize={'1em'} bg={'green.500'} /> : ""}
+				</Avatar>
+				</WrapItem>
+				<Text cursor={'pointer'} _hover={{ textDecoration: 'underline' }} onClick={(e) => { e.preventDefault(); navigate(`/${selectedConversation.username}`); }} display={"flex"} alignItems={"center"}>
 					{selectedConversation.username} <Image src='/verified.png' w={4} h={4} ml={1} />
 				</Text>
+				<Spacer />
+				<Flex mr={2}>
+					<IoClose onClick={() => { location.reload(); }} cursor={'pointer'} size={20} />
+				</Flex>
 			</Flex>
 
 			<Divider />
