@@ -87,6 +87,11 @@ const loginUser = async (req,res)=>{
         if(!user || !isPasswordCorrect) {
            return res.status(400).json({error:"Invalid Credentials"})
         }
+         
+        if(user.isFrozen){
+            user.isFrozen = false;
+            await user.save();
+        }
 
         genTokenAndSetCookie(user._id, res);
         res.json({
@@ -239,5 +244,19 @@ const getSuggestedUsers = async (req, res) => {
     }
 }
 
+const freezeAccount = async (req, res) =>{
+    try {
+        const user = await User.findById(req.user._id);
+        if(!user){
+            return res.status(404).json({error: "User not found"});
+        }
+        user.isFrozen = true;
+        await user.save();
 
-export {getUserProfile, signupUser, loginUser , logoutUser, followUnfollowUser, updateUser, getSuggestedUsers};
+        res.json({success: true});
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
+
+export {getUserProfile, signupUser, loginUser , logoutUser, followUnfollowUser, updateUser, getSuggestedUsers, freezeAccount};

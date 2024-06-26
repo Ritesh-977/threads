@@ -9,7 +9,7 @@ import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext.jsx";
 import { useNavigate } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
-
+import messageSound from "../assets/sounds/notification.mp3";
 const MessageContainer = ({isOnline}) => {
 	const showToast = useShowToast();
 	const selectedConversation = useRecoilValue(selectedConversationAtom);
@@ -26,7 +26,13 @@ const MessageContainer = ({isOnline}) => {
 			if (selectedConversation._id === message.conversationId) {
 				setMessages((prev) => [...prev, message]);
 			}
-			console.log(message, selectedConversation._id);
+
+			if(!document.hasFocus()){
+				const sound = new Audio(messageSound);
+				sound.play();
+			}
+
+
 			setConversations((prev) => {
 				const updatedConversations = prev.map((conversation) => {
 					if (conversation._id === message.conversationId) {

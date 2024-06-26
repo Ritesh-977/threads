@@ -13,11 +13,12 @@ const UserPages = () => {
   const {username} = useParams();
   const [posts, setPosts] = useRecoilState(postsAtom);
   const [fetchingPosts, setFetchingPosts] = useState(true);
+ 
   useEffect(()=>{
-  
-
      const getPosts = async () =>{
       setFetchingPosts(true);
+      if(!user) return;
+      
       try {
         const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
@@ -33,7 +34,7 @@ const UserPages = () => {
 
      getPosts();
 
-  },[username, showToast, setPosts]);
+  },[username, showToast, setPosts, user]);
   
   if(!user && loading){
     return (

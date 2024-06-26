@@ -44,9 +44,11 @@ const Header = () => {
               variant='outline'
             />
             <MenuList bg={'#0e0e0e'} >
+              <NavLink to={'/settings'}> 
               <MenuItem bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }} borderRadius={'5px'}  >
                 <Text   > Settings</Text>
               </MenuItem>
+              </NavLink>
               <MenuDivider />
               <MenuItem onClick={logout} bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }} borderRadius={'5px'} >
                 <Text   > Logout</Text>
