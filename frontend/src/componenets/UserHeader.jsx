@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Text, VStack, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Flex, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Text, VStack, useColorMode, useColorModeValue, useDisclosure } from "@chakra-ui/react"
 import { Avatar } from "@chakra-ui/avatar"
 import { BsInstagram } from "react-icons/bs"
 import { CgMoreO } from "react-icons/cg"
@@ -30,6 +30,7 @@ const UserHeader = ({user}) => {  // This user is the  Profile visited user
   const [conversations,setConversations] = useRecoilState(conversationsAtom);
   const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
   const [messagingUser, setMessagingUser] = useState(false);
+  const { colorMode } = useColorMode();
 
   const showToast = useShowToast();
 
@@ -146,21 +147,21 @@ const copyURL = () =>{
         <Link color={'gray.light'} target="_blank" href={user.website}>{user.website}</Link>
         </Flex>
         <Flex>
-          <Box className="icon-container">
+          <Box className={colorMode === 'light' ? 'light': 'dark'}>
            <Link target="_blank"  href ="https://www.instagram.com/">  < BsInstagram size={24} cursor={'pointer'}/> </Link>
           </Box>
-          <Box className="icon-container">
+          <Box className={colorMode === 'light' ? 'light': 'dark'}>
             <Menu>
               <MenuButton>
               <CgMoreO size={24} cursor={'pointer'}/>
               </MenuButton>
               <Portal>
-                <MenuList bg={'#0e0e0e'}>
-                  <MenuItem icon={ <FaLink /> }   bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'} onClick={copyURL}> Copy link  </MenuItem>
-                  <MenuItem icon={<BsInfoCircle />}  bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'} onClick={onOpen}> About this profile</MenuItem>
+                <MenuList bg={useColorModeValue("gray.300", "#0e0e0e")}>
+                  <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={ <FaLink />}   bg={useColorModeValue("gray.300", "#0e0e0e")} ml={'5px'} maxW={'210px'}  borderRadius={'5px'} onClick={copyURL}> Copy link  </MenuItem>
+                  <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={<BsInfoCircle />}  bg={useColorModeValue("gray.300", "#0e0e0e")} ml={'5px'} maxW={'210px'}  borderRadius={'5px'} onClick={onOpen}> About this profile</MenuItem>
                   <MenuDivider/>
-                  <MenuItem icon={ <MdBlock /> } color={'red'}  bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'}> Block </MenuItem>
-                  <MenuItem icon={<TbMessageReport />} color={'red'}  bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }}  borderRadius={'5px'}> Report </MenuItem>
+                  <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={ <MdBlock /> } color={'red'}  bg={useColorModeValue("gray.300", "#0e0e0e")} ml={'5px'} maxW={'210px'}  borderRadius={'5px'}> Block </MenuItem>
+                  <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={<TbMessageReport />} color={'red'}  bg={useColorModeValue("gray.300", "#0e0e0e")} ml={'5px'} maxW={'210px'}  borderRadius={'5px'}> Report </MenuItem>
                 </MenuList>
               </Portal> 
             </Menu>

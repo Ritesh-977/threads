@@ -1,4 +1,4 @@
-import { Box, Avatar, Divider, Flex, Text , Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal} from "@chakra-ui/react"
+import { Box, Avatar, Divider, Flex, Text , Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, useColorModeValue, useColorMode} from "@chakra-ui/react"
 import { BsThreeDots } from "react-icons/bs";
 import { FaRegCopy } from "react-icons/fa";
 import { MdBlock } from "react-icons/md";
@@ -14,6 +14,7 @@ const Comment = ({ reply}) => {
     const user = useRecoilValue(userAtom);
     const navigate = useNavigate();
     const showToast = useShowToast();
+    const { colorMode } = useColorMode();
     const handleCopy = ()=>{
         try {
             const currentComment = reply.text;
@@ -49,21 +50,21 @@ const Comment = ({ reply}) => {
                         fontSize={'sm'} fontWeight={'bold'}>{reply.username}</Text>
                         <Flex gap={3} alignItems={'center'}>
 
-                            <Box >
+                            <Box>
                                 <Menu>
                                     <MenuButton color="gray.light">
                                         <BsThreeDots  />
                                     </MenuButton>
                                     <Portal>
-                                        <MenuList bg={'gray.dark'}>
-                                            <MenuItem icon={<FaRegCopy />} bg={'gray.dark'} onClick={handleCopy} > Copy comment  </MenuItem>
-                                            { (user?.username === reply.username) ?  <MenuItem icon={<FaRegEdit />} bg={'gray.dark'} > Edit Comment </MenuItem>  : null }
+                                        <MenuList  bg={useColorModeValue("gray.300", "#0e0e0e")}>
+                                            <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={<FaRegCopy />} bg={useColorModeValue("gray.300", "#0e0e0e")} onClick={handleCopy} > Copy comment  </MenuItem>
+                                            { (user?.username === reply.username) ?  <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={<FaRegEdit />} bg={useColorModeValue("gray.300", "#0e0e0e")} > Edit Comment </MenuItem>  : null }
 
                                            
                                             <MenuDivider />
-                                            <MenuItem icon={<MdBlock />} color='red' bg={'gray.dark'}> Report </MenuItem>
+                                            <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={<MdBlock />} color='red' bg={useColorModeValue("gray.300", "#0e0e0e")}> Report </MenuItem>
 
-                                           { (user?.username === reply.username) ?  <MenuItem icon={<MdOutlineDelete  />} color={'red'} bg={'gray.dark'}> Delete </MenuItem> : null }
+                                           { (user?.username === reply.username) ?  <MenuItem _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} icon={<MdOutlineDelete  />} color={'red'} bg={useColorModeValue("gray.300", "#0e0e0e")}> Delete </MenuItem> : null }
   
                                         </MenuList>
                                     </Portal>
@@ -77,7 +78,7 @@ const Comment = ({ reply}) => {
                 </Flex>
                
             </Flex>
-            <Divider/>
+            <Divider borderColor={'gray.light'}/>
 
         </>
     )

@@ -1,4 +1,4 @@
-import { Avatar, AvatarBadge, Divider, Flex, Image, Skeleton, SkeletonCircle, Spacer, Text, WrapItem, useColorModeValue } from "@chakra-ui/react";
+import { Avatar, AvatarBadge, Box, Divider, Flex, Image, Skeleton, SkeletonCircle, Spacer, Text, WrapItem, useColorModeValue } from "@chakra-ui/react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
 import { useEffect, useRef, useState } from "react";
@@ -116,7 +116,8 @@ const MessageContainer = ({isOnline}) => {
 			flexDirection={"column"}
 		>
 			{/* Message header */}
-			<Flex w={"full"} h={12} alignItems={"center"} gap={2}>
+			<Flex w={"full"} h={12} alignItems={"center"} gap={2} bg={useColorModeValue("#cbd5e0", "gray.dark")}>
+			
 				<WrapItem>
 				<Avatar cursor={'pointer'} onClick={(e) => { e.preventDefault(); navigate(`/${selectedConversation.username}`) }} src={selectedConversation.userProfilePic} size={"sm"} >
 				{isOnline ?  <AvatarBadge boxSize={'1em'} bg={'green.500'} /> : ""}
@@ -129,6 +130,7 @@ const MessageContainer = ({isOnline}) => {
 				<Flex mr={2}>
 					<IoClose onClick={() => { location.reload(); }} cursor={'pointer'} size={20} />
 				</Flex>
+				
 			</Flex>
 
 			<Divider />

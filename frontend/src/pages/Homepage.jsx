@@ -15,6 +15,7 @@ const Homepage = () => {
     const getFeedPosts = async ()=>{
       setLoading(true);
       setPosts([]);
+      
       try {
         const res = await fetch("/api/posts/feed");
         const data = await res.json();
@@ -23,7 +24,7 @@ const Homepage = () => {
           return;
         }
         setPosts(data);
-     
+
       } catch (error) {
         showToast("Error", error, "error");
       } finally{

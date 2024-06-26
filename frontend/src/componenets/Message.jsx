@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Image, Text, useColorModeValue } from '@chakra-ui/react'
 import { selectedConversationAtom } from '../atoms/messagesAtom'
 import { useRecoilValue } from 'recoil'
 import userAtom from '../atoms/userAtom';
@@ -16,7 +16,7 @@ const Message = ({ ownMessage, message }) => {
           alignSelf={'flex-end'} >
 
           {message.text && (
-            <Flex bg={'green.800'} maxW={'350px'} p={1} borderRadius={'md'}>
+            <Flex bg={useColorModeValue("#337657", "#555")} maxW={'350px'} p={1} borderRadius={'md'}>
               <Text color={"white"}>{message.text}</Text>
               <Box alignSelf={"flex-end"} ml={1} color={message.seen ? "blue.400" : ""} fontWeight={'bold'}>
                 <BsCheck2All size={16} />
@@ -41,7 +41,7 @@ const Message = ({ ownMessage, message }) => {
         <Flex gap={2} >
           <Avatar src={selectedConversation.userProfilePic} w={7} h={7} />
           {message.text && (
-            <Text maxW={'350px'} bg={'#2b2c2c'} p={1} borderRadius={'md'}>
+            <Text  maxW={'350px'} bg={useColorModeValue("white", "#3182ce")} p={1} borderRadius={'md'}>
               {message.text}
             </Text>
           )}

@@ -1,13 +1,29 @@
-.icon-container{
+:root {
+    color-scheme: light dark;
+  }
+
+.light{
     border-radius: 50%;
     padding: 8px;
     width: 40px;
     height: 40px;
     transition: background-color 0.3s ease-in-out;
+    
+}
+.dark{
+    border-radius: 50%;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    transition: background-color 0.3s ease-in-out;
+    
 }
 
-.icon-container:hover{
-    background-color: #1e1e1e;
+.light:hover{
+    background-color: #CBD5E0;
+}
+.dark:hover{
+    background-color: #202121;
 }
 
 .myName:hover{

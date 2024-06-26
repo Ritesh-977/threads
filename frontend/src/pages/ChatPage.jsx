@@ -19,7 +19,7 @@ const ChatPage = () => {
 	const currentUser = useRecoilValue(userAtom);
 	const showToast = useShowToast();
 	const { socket, onlineUsers } = useSocket();
-
+	
 	useEffect(() => {
 		socket?.on("messagesSeen", ({ conversationId }) => {
 			setConversations((prev) => {
@@ -42,6 +42,7 @@ const ChatPage = () => {
 
 	useEffect(() => {
 		const getConversations = async () => {
+			
 			try {
 				const res = await fetch("/api/messages/conversations");
 				const data = await res.json();

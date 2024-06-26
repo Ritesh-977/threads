@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Image, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Divider, Button, Spinner } from "@chakra-ui/react"
+import { Avatar, Box, Flex, Image, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Portal, Divider, Button, Spinner, useColorModeValue, useColorMode } from "@chakra-ui/react"
 import { BsThreeDots } from "react-icons/bs";
 import { FaLink } from "react-icons/fa";
 import { RiSaveLine } from "react-icons/ri";
@@ -24,6 +24,7 @@ const PostPage = () => {
   const currentUser = useRecoilValue(userAtom);
   const navigate = useNavigate();
   const currentPost = posts[0];
+  const { colorMode } = useColorMode();
   useEffect(()=>{
     const getPost = async () =>{
       setPosts([]);
@@ -104,20 +105,20 @@ const handlePost = async () =>{
         <Text textAlign={'right'} fontSize={'sm'} w={36} color={'gray.light'}>
           {formatDistanceToNowStrict(new Date(currentPost.createdAt)) } ago
         </Text>
-          <Box className="icon-container">
+          <Box className={colorMode === 'light' ? 'light': 'dark'}>
             <Menu>
               <MenuButton >
-                <BsThreeDots size={24} cursor={'pointer'} />
+                <BsThreeDots  size={24} cursor={'pointer'} />
               </MenuButton>
               <Portal>
-                <MenuList bg={'gray.dark'}>
+                <MenuList bg={useColorModeValue("gray.300", "#0e0e0e")}>
                 
-                  <MenuItem icon={<RiSaveLine />} bg={'gray.dark'} onClick={downloadImg}> Save </MenuItem>
-                  <MenuItem icon={<FaRegEdit />  } bg={'gray.dark'} onClick={handlePost}> Edit Caption </MenuItem>
+                  <MenuItem icon={<RiSaveLine />} _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} bg={useColorModeValue("gray.300", "#0e0e0e")} onClick={downloadImg}> Save </MenuItem>
+                  <MenuItem icon={<FaRegEdit />  } _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} bg={useColorModeValue("gray.300", "#0e0e0e")} onClick={handlePost}> Edit Caption </MenuItem>
                   <MenuDivider />
-                  { currentUser?._id === user._id &&  <MenuItem color={'red'} bg={'gray.dark'} onClick={handleDeletePost} icon=  { <DeleteIcon /> }> Delete</MenuItem>  }
+                  { currentUser?._id === user._id &&  <MenuItem color={'red'} _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} bg={useColorModeValue("gray.300", "#0e0e0e")} onClick={handleDeletePost} icon=  { <DeleteIcon /> }> Delete</MenuItem>  }
                   {currentUser?._id === user._id && <MenuDivider/>}
-                  <MenuItem icon={<FaLink />} bg={'gray.dark'} onClick={copyURL}> Copy link  </MenuItem>
+                  <MenuItem icon={<FaLink />} _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} bg={useColorModeValue("gray.300", "#0e0e0e")} onClick={copyURL}> Copy link  </MenuItem>
                 </MenuList>
               </Portal>
             </Menu>
@@ -142,7 +143,7 @@ const handlePost = async () =>{
         <Actions post={currentPost} />
       </Flex>
 
-      <Divider my={4}/>
+      <Divider my={4} borderColor={'gray.light'}/>
 
       <Flex justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'}>
@@ -155,7 +156,7 @@ const handlePost = async () =>{
         <Text fontWeight={'bold'}>Replies</Text>
       </Flex>
 
-      <Divider my={4}/>
+      <Divider my={4} borderColor={'gray.light'} />
   
       {currentPost.replies.map((reply) =>(
      <Comment

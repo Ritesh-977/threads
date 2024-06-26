@@ -1,4 +1,4 @@
-import { Flex, Image, useColorMode, Link, Menu, MenuButton, MenuList, MenuItem, IconButton, Text, MenuDivider, Button } from "@chakra-ui/react"
+import { Flex, Image, useColorMode, Link, Menu, MenuButton, MenuList, MenuItem, IconButton, Text, MenuDivider, Button, useColorModeValue } from "@chakra-ui/react"
 import userAtom from "../atoms/userAtom";
 import { NavLink } from "react-router-dom";
 import { AiFillHome } from 'react-icons/ai';
@@ -24,9 +24,10 @@ const Header = () => {
         cursor={"pointer"}
         alt="logo"
         w={6}
-        src={colorMode === "dark" ? "/light-logo.svg" : "dark-logo.svg"}
+        src={colorMode === "dark" ? "/light-logo.svg" : "/dark-logo.svg"}
         onClick={toggleColorMode}
       />
+
       {user && (
         <Flex alignItems={'center'} gap={10}>
           <NavLink to={`/${user.username}`}>
@@ -43,18 +44,18 @@ const Header = () => {
               icon={<HamburgerIcon />}
               variant='outline'
             />
-            <MenuList bg={'#0e0e0e'} >
+            <MenuList bg={useColorModeValue("gray.300", "#0e0e0e")}  color={useColorModeValue("gray.dark", "white")}  >
               <NavLink to={'/settings'}> 
-              <MenuItem bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }} borderRadius={'5px'}  >
+              <MenuItem bg={useColorModeValue("gray.300", "#0e0e0e")} ml={'5px'} maxW={'210px'} _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} borderRadius={'5px'}  >
                 <Text   > Settings</Text>
               </MenuItem>
               </NavLink>
               <MenuDivider />
-              <MenuItem onClick={logout} bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }} borderRadius={'5px'} >
+              <MenuItem onClick={logout} bg={useColorModeValue("gray.300", "#0e0e0e")} ml={'5px'} maxW={'210px'} _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} borderRadius={'5px'} >
                 <Text   > Logout</Text>
               </MenuItem>
               <MenuDivider />
-              <MenuItem bg={'#0e0e0e'} ml={'5px'} maxW={'210px'} _hover={{ bg: 'gray.dark' }} borderRadius={'5px'} >
+              <MenuItem bg={useColorModeValue("gray.300", "#0e0e0e")} ml={'5px'} maxW={'210px'} _hover={{ bg: (colorMode === "dark" ? 'gray.dark':'gray.200' )}} borderRadius={'5px'} >
                 <Text color={'red'}  >Report a Problem</Text>
               </MenuItem>
             </MenuList>
