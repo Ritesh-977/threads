@@ -1,10 +1,11 @@
-import { Flex, Spinner } from '@chakra-ui/react'
+import { Box, Flex, Spinner } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 
 import useShowToast from './../hooks/useShowToast';
 import Post from '../componenets/Post';
 import { useRecoilState } from 'recoil';
 import postsAtom from '../atoms/postsAtom';
+import SuggestedUsers from '../componenets/SuggestedUsers';
 
 const Homepage = () => {
   const [posts, setPosts] = useRecoilState(postsAtom);
@@ -33,7 +34,8 @@ const Homepage = () => {
   },[showToast, setPosts])
 
   return (
-   <>
+   <Flex gap={10} alignItems={'flex-start'}>
+    <Box flex={70}>
       {!loading && posts.length === 0 && <h1>Follow someone to see some posts</h1>}
       {loading && (
         <Flex justifyContent={'center'}>
@@ -44,7 +46,11 @@ const Homepage = () => {
       {posts.map((post)=>(
         <Post key={post._id} post = {post} postedBy = {post.postedBy} />
       ))}
-   </>
+      </Box>
+      <Box flex={30} display={{base: 'none', md: 'block'}}>
+       <SuggestedUsers/>
+      </Box>
+   </Flex>
   )
 }
 

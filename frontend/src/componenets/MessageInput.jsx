@@ -78,8 +78,12 @@ const MessageInput = ({setMessages}) => {
     <Flex gap={2} alignItems={'center'}>
     <form onSubmit={handleSendMessage} style={{flex: 95}}>
       <InputGroup>
-      <Input textOverflow={"ellipsis"}  w={'290px'} placeholder="Type a message"
+      <Input textOverflow={"ellipsis"} placeholder="Type a message"
             value = {messageText} onChange = {(e)=> setMessageText(e.target.value) }
+            w={{
+              md: '385px',
+              base: '290px'
+            }}
             /> 
       <Flex >
       <InputRightElement   onClick={handleSendMessage}>

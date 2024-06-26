@@ -212,7 +212,32 @@ const updateUser = async (req, res)=>{
 
 }
 
+const getSuggestedUsers = async (req, res) => {
+    try {
+      //  Exclude current user and following users
+        const userId = req.user._id;
+        const usersFollowedByYou = await User.findById(userId).select("following");
+
+        const users = await User.aggregate([
+            {
+                $match:{
+                    _id: {$ne: userId},
+                }
+            },
+            {
+                $sample: {size:10}
+            }
+        ])
+
+        const filteredUsers = users.filter(user => !usersFollowedByYou.following.includes(user._id))
+        const suggestedusers = filteredUsers.slice(0,4)
+
+        res.json(suggestedusers);
+
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+}
 
 
-
-export {getUserProfile, signupUser, loginUser , logoutUser, followUnfollowUser, updateUser};
+export {getUserProfile, signupUser, loginUser , logoutUser, followUnfollowUser, updateUser, getSuggestedUsers};
