@@ -14,10 +14,12 @@ dotenv.config();
 connectDB();
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
+var cors = require('cors')
 
+app.use(cors())
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
