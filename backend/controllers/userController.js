@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import genTokenAndSetCookie from '../utils/helpers/genTokenAndSetCookie.js';
 import { v2 as cloudinary } from 'cloudinary';
 import mongoose from 'mongoose';
-
+import asyncHandler from "express-async-handler";
 
 // Get Users Profile
 const getUserProfile = async (req, res)=>{
@@ -259,4 +259,17 @@ const freezeAccount = async (req, res) =>{
     }
 }
 
-export {getUserProfile, signupUser, loginUser , logoutUser, followUnfollowUser, updateUser, getSuggestedUsers, freezeAccount};
+// /api/users?search=rahul977
+const allUsers = asyncHandler(async (req, res) =>{
+  const keyword = req.query.search ? {
+    $or: [
+        {name: {$regex: req.query.search, $options: "i"}},
+        {username: {$regex: req.query.search, $options: "i"}},
+    ]
+  }
+  : {};
+  const users = await User.find(keyword).find({_id: {$ne: req.user._id}})
+  res.send(users);
+})
+
+export {allUsers, getUserProfile, signupUser, loginUser , logoutUser, followUnfollowUser, updateUser, getSuggestedUsers, freezeAccount};

@@ -170,27 +170,37 @@ const copyURL = () =>{
         </Flex>
       </Flex>
       
-      <Flex w={'full'} >
+      <Flex w={'full'}>
 
      
         {currentUser?._id === user._id && (
-           <Flex flex={1} justifyContent={'center'} pb={3}>
+           <Flex w={'full'}>
           <Link as ={RouterLink} to="/update">
           <Button 
            size='md'
            height='40px'
-           width='600px'
+           width={{
+            base: '350px',
+            sm: '500px',
+            md: '600px'
+           }}
           borderRadius={'10px'}
            >Edit Profile</Button>
         </Link>  </Flex> )}
        
-        <Flex flex={1} justifyContent={'center'} pb={3}>
+        <Flex  justifyContent={'right'}  pb={3}>
         {currentUser?._id !== user._id && (
           <Button 
+        
            size='md'
            height='37px'
-           width='280px'
            border={"1px solid"}
+           width={{
+            base: '180px',
+            sm: '230px',
+            md: '270px'
+           
+           }}
            borderColor={"#595353"}
           borderRadius={'10px'}
           isLoading ={updating}
@@ -199,16 +209,22 @@ const copyURL = () =>{
          )}
         </Flex>
 
-        <Flex flex={1} justifyContent={'center'}>
+        <Flex  justifyContent={'center'}>
         {currentUser?._id !== user._id && (
         <NavLink  to="/chat">
           <Button 
+          ml={3}
           isLoading = {messagingUser}
           border={"1px solid"}
           borderColor={"#595353"}
+          width={{
+            base: '180px',
+            sm: '230px',
+            md: '270px'
+           
+           }}
           size='md'
            height='37px'
-           width='280px'
           borderRadius={'10px'} 
           onClick={handleMessageBox}> Message</Button>
          </NavLink> 

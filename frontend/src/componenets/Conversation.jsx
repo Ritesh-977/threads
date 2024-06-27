@@ -20,7 +20,7 @@ const Conversation = ({ conversation, isOnline }) => {
 	const currentUser = useRecoilValue(userAtom);
 	const lastMessage = conversation.lastMessage;
 	const [selectedConversation, setSelectedConversation] = useRecoilState(selectedConversationAtom);
-	const colorMode = useColorMode();
+
 
 	console.log("selectedConverstion", selectedConversation);
 	return (

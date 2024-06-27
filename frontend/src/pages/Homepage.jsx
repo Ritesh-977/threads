@@ -48,7 +48,7 @@ const Homepage = () => {
         <Post key={post._id} post = {post} postedBy = {post.postedBy} />
       ))}
       </Box>
-      <Box flex={30} display={{base: 'none', md: 'block'}}>
+      <Box flex={30}>
        <SuggestedUsers/>
       </Box>
    </Flex>

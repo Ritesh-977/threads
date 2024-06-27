@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import useLogout from "../hooks/useLogout";
 import { BsFillChatLeftTextFill } from "react-icons/bs";
+import SlideDrawer from "../miscellaneous/SlideDrawer";
 const Header = () => {
 
   const logout = useLogout();
@@ -14,10 +15,19 @@ const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Flex justifyContent={"space-between"} mt={"6"} mb={"12"} >
+      
+      {user &&
+      <Flex mt={2}>
+       <SlideDrawer/>
+      </Flex>
+       }
+      
       {user && (
-        <NavLink to="/">
+        <Flex mt={3}>
+        <NavLink  to="/">
           <AiFillHome size={24} />
         </NavLink>
+        </Flex>
       )}
 
       <Image
@@ -33,6 +43,8 @@ const Header = () => {
           <NavLink to={`/${user.username}`}>
             <RxAvatar size={24} />
           </NavLink>
+        
+
           <NavLink to={`/chat`}>
             <BsFillChatLeftTextFill size={24} />
           </NavLink>
