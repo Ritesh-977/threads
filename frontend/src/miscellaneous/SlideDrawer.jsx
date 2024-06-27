@@ -48,7 +48,7 @@ const SlideDrawer = () => {
               </Button>
         </Tooltip>
     </Box>
-    <Drawer initialFocusRef={firstField} placement='left' onClose={onClose} isOpen = {isOpen}>
+    <Drawer initialFocusRef={firstField} placement='left' onClose={onClose}  isOpen = {isOpen}>
     <DrawerOverlay/>
     <DrawerContent>
         <DrawerHeader borderBottomWidth={'1px'}> Search Users </DrawerHeader>
@@ -79,10 +79,12 @@ const SlideDrawer = () => {
                     ))
             ):(
               searchResult?.map(user =>(
+                <Box onClick={onClose}>
                 <UserListItem 
                 key = {user._id}
                 user = {user}
                 />
+                </Box>
               ))
             )}
          </DrawerBody>

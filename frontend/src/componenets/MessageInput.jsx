@@ -81,26 +81,20 @@ const MessageInput = ({setMessages}) => {
       <Input textOverflow={"ellipsis"} placeholder="Type a message"
             value = {messageText} onChange = {(e)=> setMessageText(e.target.value) }
             w={{
-              md: '385px',
-              base: '290px'
+              base: '280px',
+              md: '380px',
             }}
             /> 
       <Flex >
       <InputRightElement   onClick={handleSendMessage}>
-      <Flex alignItems={'center'} gap={3} mr={5}>
-      <MdEmojiEmotions  size={20} cursor={'pointer'} onClick={()=> setShowPicker((val) => !val)}/>
+      <Flex alignItems={'center'} mr={4}>
        <IoSendSharp  size={20} color = 'gray' cursor={'pointer'} />
        </Flex>
       </InputRightElement>
       </Flex>
       </InputGroup>
-      <Flex ml={7} mt={2}>
-        {showPicker && (
-          <Picker theme="dark"  width={'400px'} height={400} onEmojiClick={onEmojiClick}/>
-        )}
-       </Flex>
     </form>
-    <Flex flex={5} cursor={'pointer'} mr={1} mb={1}>
+    <Flex flex={5} cursor={'pointer'} mr={3} mb={1}>
       <BsFillImageFill size={20} onClick={()=> imageRef.current.click()} />
         <Input type="file" hidden ref={imageRef} onChange={handleImageChange}/>
     </Flex>

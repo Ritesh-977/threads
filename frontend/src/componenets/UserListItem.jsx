@@ -1,11 +1,12 @@
-import { Avatar, Box, Text } from '@chakra-ui/react'
+import { Avatar, Box, Text} from '@chakra-ui/react'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 const UserListItem = ({user}) => {
-  return (
-    <Box
 
+  return (
+    <NavLink to={`/${user.username}`}> 
+    <Box
     cursor={'pointer'}
     w={'100%'}
     display={'flex'}
@@ -19,14 +20,15 @@ const UserListItem = ({user}) => {
         bg:'gray.600'
     }}
     >  
-        <NavLink to={`/${user.username}`}>   
+         
         <Avatar 
         mr={2}
         size={'sm'}
         name={user.name}
         src={user.profilePic}
+
         />
-        </NavLink>
+     
         
         <Box >
         <NavLink to={`/${user.username}`}>
@@ -36,6 +38,7 @@ const UserListItem = ({user}) => {
         </Box>
       
     </Box>
+    </NavLink>
   )
 }
 
