@@ -1,4 +1,4 @@
-import { Avatar, Box, Text} from '@chakra-ui/react'
+import { Avatar, Box, Text, useColorModeValue} from '@chakra-ui/react'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -17,7 +17,7 @@ const UserListItem = ({user}) => {
     mb={2}
     borderRadius={'lg'}
     _hover={{
-        bg:'gray.600'
+        bg:'gray.600',
     }}
     >  
          
@@ -32,7 +32,7 @@ const UserListItem = ({user}) => {
         
         <Box >
         <NavLink to={`/${user.username}`}>
-            <Text fontWeight={'bold'} >{user.username}</Text>
+            <Text color= { useColorModeValue('black','white')} fontWeight={'bold'} >{user.username}</Text>
             <Text fontSize={'xs'}  color={'gray.400'}>{user.name}</Text>
         </NavLink>
         </Box>
